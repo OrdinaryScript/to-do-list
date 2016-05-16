@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>To-Do Tasks List - Valtn.me</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+        tr td:first-child {
+            width: 30px;
+        }
+        tr td:last-child {
+            width: 50px;
+        }
+        /* Checkboxes */
+        input[type=checkbox] {
+            width: 15px;
+            height: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>To-Do Tasks List <small>by Valtn.me</small></h3>
+            <p>Simple to-do list of items to keep track of the things that matter and save them within the application we use most in our lives, our browser. All information is stored in your browser using <em>local storage</em>, nothing you write leaves your computer. Your data will continue to be here despite browser restarts.</p>
+        </div>
+    </div>
+    <br>
+    <!--<h4 id="title" class="text-center">To-Do Tasks</h4>-->
+    <div class="row">
+        <div class="col-md-12">
+            <!--<p class="pull-right">-->
+            <!--<button type="button" class="btn btn-default btn-sm" onclick="changeView()">-->
+            <!--Show Completed-->
+            <!--</button>-->
+            <!--</p>-->
+            <!--<p id="newTaskP" class="pull-left">-->
+            <!--<button type="button" class="btn btn-default btn-sm" onclick="newItem()">-->
+            <!--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Task-->
+            <!--</button>-->
+            <!--</p>-->
+        </div>
+    </div>
+    <!-- To-do list -->
+    <div class="row">
+        <div class="col-md-12">
+        </div>
+    </div>
+    <!-- Completed list -->
+    <div class="row">
+        <div class="col-md-12">
+        </div>
+    </div>
+
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="pull-right"><a href="#tabCompleted" aria-controls="tabCompleted" role="tab" data-toggle="tab">Completed</a></li>
+            <li role="presentation" class="pull-right active"><a href="#tabToDo" aria-controls="tabToDo" role="tab" data-toggle="tab">Tasks</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="tabToDo">
+                <br>
+                <p id="newTaskP">
+                    <button type="button" class="btn btn-default btn-sm" onclick="newItem()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Task
+                    </button>
+                </p>
+                <table class="table">
+                    <tbody id="content">
+                    <th>
+                    <td></td>
+                    <td>You haven't added any items yet.</td>
+                    <td></td>
+                    </th>
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tabCompleted">
+                <br>
+                <p>
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                        <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Delete all completed tasks
+                    </button>
+                </p>
+                <table class="table">
+                    <tbody id="contentCompleted">
+                    <th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    </th>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- Modal -->
+<div class="modal" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" style="margin-top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Edit task</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <textarea class="form-control" id="modalInput"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="modalSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Modal -->
+<!-- Confirm delete modal -->
+<div class="modal" id="confirmDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirm delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete all completed tasks?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteAllCompletedTasks()">Yes, delete them</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Confirm delete modal -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script>
+    // Main JSON Object
+    var json
+    var newItemMode = false;
+    var newItemModeText = `<strong>Press <span class="label label-default">Enter</span> to save or <span class="label label-default">Esc</span> to cancel</strong>`;
+    var newItemModeHtml = document.getElementById("newTaskP").innerHTML;
+    var viewMode = "to-do";
+    // Load data
+    if(localStorage.getItem("data") === null){
+        json = {};
+        var items = [];
+        json.items = items;
+    } else {
+        json = JSON.parse(localStorage.getItem("data"));
+        //console.log(JSON.stringify(json));
+        populateHtml();
+    }
+
+    function saveData(){
+        var stringJson = JSON.stringify(json);
+        localStorage.setItem("data", stringJson);
+    }
+
+    function populateHtml(){
+        //$("#content").empty();
+        $("#content").html("");
+        $("#contentCompleted").html("");
+
+        var i = json.items;
+        for(var c in i){
+            if(i[c].completed == false) {
+                var row = `
+                <tr id="item${i[c].id}">
+                    <td><input type="checkbox" onclick="checkboxChangeState(${i[c].id})"></td>
+                    <td ondblclick="editExistingItem(${i[c].id})">${i[c].text}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="false"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="editExistingItem(${i[c].id})"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a></li>
+                                <li><a onclick="deleteItem(${i[c].id})"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            `;
+                //console.log(i[c].id);
+                //console.log(i[c].text);
+                $("#content").append(row);
+            } else {
+                var row = `
+                <tr id="item${i[c].id}">
+                    <td><input type="checkbox" onclick="checkboxChangeState(${i[c].id})" checked></td>
+                    <td ondblclick="editExistingItem(${i[c].id})">${i[c].text}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="false"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="editExistingItem(${i[c].id})"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a></li>
+                                <li><a onclick="deleteItem(${i[c].id})"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            `;
+                //console.log(i[c].id);
+                //console.log(i[c].text);
+                $("#contentCompleted").append(row);
+            }
+        }
+    }
+
+    function newItem(){
+        newItemMode = true;
+        $("#newTaskP").html(newItemModeText);
+
+        // Add a new item row
+        var newItemRow = `
+                <tr id="editModeTr">
+                    <td></td>
+                    <td colspan="2"><input type="text" class="form-control" placeholder="Task" id="editModeInput" style="margin-top:10px;margin-bottom:10px;"></td>
+                </tr>
+        `;
+        $("#content").prepend(newItemRow);
+    }
+
+    function saveNewItem(){
+        json.items.push({"id":1+json.items.length,"text":document.getElementById("editModeInput").value,"completed":false});
+        saveData();
+        populateHtml();
+    }
+
+    function editExistingItem(id){
+        var item = "#item" + id;
+        /*var input = `<input type="text" value="${$(item + " td:nth-child(2)").html()}" class="form-control">`;
+         $(item + " td:nth-child(2)").html(input);*/
+
+        $('#editModal').modal('toggle');
+        $('#modalInput').val($(item + " td:nth-child(2)").html());
+        $('#modalSave').attr("onclick", "saveChangesToItem(" + id + ")");
+    }
+
+    function saveChangesToItem(id){
+        var i = json.items;
+        var tmp = [];
+        for(var c in i){
+            if(i[c].id == id){
+                var text = $('#modalInput').val();
+                tmp.push({"id":i[c].id,"text":text,"completed":i[c].completed});
+            } else {
+                tmp.push({"id":i[c].id,"text":i[c].text,"completed":i[c].completed});
+            }
+        }
+        json.items = tmp;
+        saveData();
+        populateHtml();
+        $('#editModal').modal('toggle');
+    }
+
+    function deleteItem(id){
+        var i = json.items;
+        var tmp = [];
+        for(var c in i){
+            if(i[c].id !== id){
+                tmp.push({"id":i[c].id,"text":i[c].text,"completed":i[c].completed});
+            }
+        }
+        json.items = tmp;
+        saveData();
+        populateHtml();
+    }
+
+    function deleteAllCompletedTasks(){
+        var i = json.items;
+        var tmp = [];
+        for(var c in i){
+            if(i[c].completed == false){
+                tmp.push({"id":i[c].id,"text":i[c].text,"completed":i[c].completed});
+            }
+        }
+        json.items = tmp;
+        saveData();
+        populateHtml();
+        $('#confirmDeleteModal').modal('toggle');
+    }
+
+    function changeView(){
+        if(viewMode === "to-do"){
+            // Change to completed tasks
+            $("#content").css("display","none");
+            $("#contentCompleted").css("display","");
+            $("#title").html("Completed Tasks");
+            viewMode = "completed";
+        } else {
+            // Change back to to-do tasks
+            $("#content").css("display","");
+            $("#contentCompleted").css("display","none");
+            $("#title").html("To-Do Tasks");
+            viewMode = "to-do";
+        }
+    }
+
+    function checkboxChangeState(id) {
+        var i = json.items;
+        var tmp = [];
+        for(var c in i){
+            if(i[c].id == id){
+//                if(i[c].completed){
+//                    // Mark as non completed
+//                    tmp.push({"id":i[c].id,"text":text,"completed":false});
+//                } else {
+//                    // Mark as completed
+//                    tmp.push({"id":i[c].id,"text":text,"completed":true});
+//                }
+                // Change completed to opposite value
+                tmp.push({"id":i[c].id,"text":i[c].text,"completed":!(i[c].completed)});
+            } else {
+                tmp.push({"id":i[c].id,"text":i[c].text,"completed":i[c].completed});
+            }
+        }
+        json.items = tmp;
+        saveData();
+        populateHtml();
+    }
+
+    // Key press listener
+    $(document).keypress(function(e) {
+        // Check if newItemMode enabled, else no values to grab.
+        if(newItemMode) {
+            // Enter key
+            if (e.which == 13) {
+                //Save item
+                saveNewItem();
+                //Disable edit mode
+                $("#newTaskP").html(newItemModeHtml);
+                newItemMode = false;
+                $("#editModeTr").remove();
+            }
+        }
+    });
+
+    // Key up listener (Esc doesn't seem to work properly on keyPress
+    $(document).keyup(function(e) {
+        // Check if newItemMode enabled, else no values to grab.
+        if(newItemMode) {
+            // Esc key
+            if (e.keyCode == 27) {
+                $("#newTaskP").html(newItemModeHtml);
+                newItemMode = false;
+                $("#editModeTr").remove();
+            }
+        }
+    });
+
+    // Add listener to the edit task text field so that when Enter
+    // is pressed, it gets saved instead of adding a new line
+    $('#modalInput').keypress(function(e){
+        if(e.keyCode==13)
+            $('#modalSave').click();
+    });
+
+</script>
+</body>
+</html>
