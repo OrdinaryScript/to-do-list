@@ -405,11 +405,11 @@
             $('#modalSave').click();
     });
 
-    $(document).on('click touchstart', '#addItem', function(){
+    $(document).on('click touchend', '#addItem', function(){
       saveNewItem();
       $("#newTaskP").html(newItemModeHtml);
     });
-    $(document).on('click touchstart', '#cancelItem', function(){
+    $(document).on('click touchend', '#cancelItem', function(){
       $("#newTaskP").html(newItemModeHtml);
       newItemMode = false;
       $("#editModeTr").remove();
