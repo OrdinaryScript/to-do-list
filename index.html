@@ -18,6 +18,23 @@
             width: 15px;
             height: 15px;
         }
+        #addItem{
+          background-color: #66CDAA;
+        }
+
+        #cancelItem{
+          background-color: #DC143C;
+        }
+
+        /*overrides*/
+        .input-group-addon{
+          border: none;
+          color: #FFF;
+          cursor: pointer;
+        }
+        .input-group-addon:hover{
+          opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -156,7 +173,7 @@
     // Main JSON Object
     var json
     var newItemMode = false;
-    var newItemModeText = `<strong class="visible-md visible-lg">Press <span class="label label-default">Enter</span> to save or <span class="label label-default">Esc</span> to cancel</strong>`;
+    var newItemModeText = `<strong class='visible-md visible-lg'>Press <span class="label label-default">Enter</span> to save or <span class="label label-default">Esc</span> to cancel</strong>`;
     var newItemModeHtml = document.getElementById("newTaskP").innerHTML;
     var viewMode = "to-do";
     // Load data
@@ -236,7 +253,18 @@
         var newItemRow = `
                 <tr id="editModeTr">
                     <td></td>
-                    <td colspan="2"><input type="text" class="form-control" placeholder="Task" id="editModeInput" style="margin-top:10px;margin-bottom:10px;"></td>
+                    <td colspan="2">
+
+                      <div class="input-group">
+                        <input id="editModeInput" type="text" class="form-control" id="exampleInputAmount" placeholder="Task">
+                        <div id='addItem' class="input-group-addon">
+                          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </div>
+                        <div id='cancelItem' class="input-group-addon">
+                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
+                      </div>
+                    </td>
                 </tr>
         `;
         $("#content").prepend(newItemRow);
@@ -375,6 +403,16 @@
     $('#modalInput').keypress(function(e){
         if(e.keyCode==13)
             $('#modalSave').click();
+    });
+
+    $(document).on('click touchstart', '#addItem', function(){
+      saveNewItem();
+      $("#newTaskP").html(newItemModeHtml);
+    });
+    $(document).on('click touchstart', '#cancelItem', function(){
+      $("#newTaskP").html(newItemModeHtml);
+      newItemMode = false;
+      $("#editModeTr").remove();
     });
 
 </script>
