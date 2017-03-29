@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Secure and simple to-do list manager. Tasks stored in browser.">
+    <meta name="keywords" content="task list,tasks,todo,to-do,item list,safe,secure,private,pending,simple todo list">
     <title>To-Do Tasks List - Valtn.me</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
@@ -12,6 +14,9 @@
         }
         tr td:last-child {
             width: 50px;
+        }
+        button:focus {
+            outline: 0 !important;
         }
         /* Checkboxes */
         input[type=checkbox] {
@@ -77,11 +82,11 @@
                 </p>
                 <table class="table">
                     <tbody id="content">
-                    <th>
-                    <td></td>
-                    <td>You haven't added any items yet.</td>
-                    <td></td>
-                    </th>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center">You haven't added any items yet.</td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -94,11 +99,11 @@
                 </p>
                 <table class="table">
                     <tbody id="contentCompleted">
-                    <th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    </th>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
