@@ -2,7 +2,7 @@
 var json;
 var newItemMode = false;
 var newItemModeText = `<strong class='visible-md visible-lg'>Press <span class="label label-default">Enter</span> to save or <span class="label label-default">Esc</span> to cancel</strong>`;
-var newItemModeHtml = document.getElementById("newTaskP").innerHTML;
+var newItemModeHtml = document.getElementById("newTaskP").innerHTML; // Save html for after adding new task
 var viewMode = "to-do";
 // Load data
 if(localStorage.getItem("data") === null){
@@ -84,7 +84,7 @@ function newItem(){
                     <td colspan="2">
 
                       <div class="input-group">
-                        <input id="editModeInput" type="text" class="form-control" id="exampleInputAmount" placeholder="Task">
+                        <input id="editModeInput" type="text" class="form-control" placeholder="Task">
                         <div id='addItem' class="input-group-addon">
                           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </div>
@@ -160,6 +160,7 @@ function deleteAllCompletedTasks(){
     $('#confirmDeleteModal').modal('toggle');
 }
 
+// Not in use, let Bootstrap handle all the tab switching
 function changeView(){
     if(viewMode === "to-do"){
         // Change to completed tasks
@@ -235,9 +236,30 @@ $('#modalInput').keypress(function(e){
         $('#modalSave').click();
 });
 
+// Shortcut key listener
+$(document).keypress(function (e) {
+    // a || n || A || N
+    if (e.keyCode == 97 || e.keyCode == 110 || e.keyCode == 65 || e.keyCode == 78) {
+        // In case user is in Completed tab
+        if($('.nav-tabs .active').text() == "Completed") {
+            $('#tabs a[href="#tabToDo"]').tab('show');
+            // .focus must be delayed till after fade
+            setTimeout(function () {
+                $("#editModeInput").focus();
+            }, 180);
+        }
+        if(!newItemMode) {
+            e.preventDefault(); // To avoid having the letter pressed put into the input field
+            newItem();
+            newItemMode = true;
+        }
+    }
+});
+
 $(document).on('click touchend', '#addItem', function(){
     saveNewItem();
     $("#newTaskP").html(newItemModeHtml);
+    newItemMode = false;
 });
 $(document).on('click touchend', '#cancelItem', function(){
     $("#newTaskP").html(newItemModeHtml);
