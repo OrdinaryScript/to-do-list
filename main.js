@@ -100,7 +100,7 @@ function newItem(){
 }
 
 function saveNewItem(){
-    json.items.push({"id":1+json.items.length,"text":document.getElementById("editModeInput").value,"completed":false});
+    json.items.push({"id":Date.now(),"text":document.getElementById("editModeInput").value,"completed":false});
     saveData();
     populateHtml();
 }
