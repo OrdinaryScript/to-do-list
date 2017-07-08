@@ -4,6 +4,7 @@ var newItemMode = false;
 var newItemModeText = `<strong class='visible-md visible-lg'>Press <span class="label label-default">Enter</span> to save or <span class="label label-default">Esc</span> to cancel</strong>`;
 var newItemModeHtml = document.getElementById("newTaskP").innerHTML; // Save html for after adding new task
 var viewMode = "to-do";
+var editMode = false;
 // Load data
 if(localStorage.getItem("data") === null){
     json = {};
@@ -114,6 +115,7 @@ function editExistingItem(id){
     $('#modalInput').val($(item + " td:nth-child(2)").html());
     $('#modalSave').attr("onclick", "saveChangesToItem(" + id + ")");
     $('#modalInput').focus();
+    editMode = true;
 }
 
 function saveChangesToItem(id){
@@ -130,7 +132,7 @@ function saveChangesToItem(id){
     json.items = tmp;
     saveData();
     populateHtml();
-    $('#editModal').modal('toggle');
+    hideEditModal();
 }
 
 function deleteItem(id){
@@ -218,13 +220,15 @@ $(document).keypress(function(e) {
 
 // Key up listener (Esc doesn't seem to work properly on keyPress
 $(document).keyup(function(e) {
-    // Check if newItemMode enabled, else no values to grab.
-    if(newItemMode) {
-        // Esc key
-        if (e.keyCode == 27) {
+    // Esc key
+    if (e.keyCode == 27) {
+        // Check if newItemMode enabled, else no values to grab.
+        if(newItemMode) {
             $("#newTaskP").html(newItemModeHtml);
             newItemMode = false;
             $("#editModeTr").remove();
+        } else if (editMode){
+            hideEditModal();
         }
     }
 });
@@ -240,6 +244,10 @@ $('#modalInput').keypress(function(e){
 $(document).keypress(function (e) {
     // a || n || A || N
     if (e.keyCode == 97 || e.keyCode == 110 || e.keyCode == 65 || e.keyCode == 78) {
+        // Ignore if editing item
+        if (editMode){
+            return;
+        }
         // In case user is in Completed tab
         if($('.nav-tabs .active').text() == "Completed") {
             $('#tabs a[href="#tabToDo"]').tab('show');
@@ -266,3 +274,8 @@ $(document).on('click touchend', '#cancelItem', function(){
     newItemMode = false;
     $("#editModeTr").remove();
 });
+
+function hideEditModal(){
+    editMode = false;
+    $("#editModal").modal('hide');
+}
