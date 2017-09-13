@@ -136,6 +136,11 @@ function saveChangesToItem(id){
 }
 
 function deleteItem(id){
+    // Disable edit mode
+    $("#newTaskP").html(newItemModeHtml);
+    newItemMode = false;
+    $("#editModeTr").remove();
+
     var i = json.items;
     var tmp = [];
     for(var c in i){
@@ -236,8 +241,9 @@ $(document).keyup(function(e) {
 // Add listener to the edit task text field so that when Enter
 // is pressed, it gets saved instead of adding a new line
 $('#modalInput').keypress(function(e){
-    if(e.keyCode==13)
+    if(e.keyCode == 13){
         $('#modalSave').click();
+    }
 });
 
 // Shortcut key listener
