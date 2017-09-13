@@ -150,7 +150,10 @@ function deleteItem(id){
     }
     json.items = tmp;
     saveData();
-    populateHtml();
+    $("#item"+id).closest('tr').fadeOut(200);
+    setTimeout(function () {
+        populateHtml();
+    }, 210);
 }
 
 function deleteAllCompletedTasks(){
@@ -204,7 +207,10 @@ function checkboxChangeState(id) {
     }
     json.items = tmp;
     saveData();
-    populateHtml();
+    $("#item"+id).closest('tr').fadeOut(200);
+    setTimeout(function () {
+        populateHtml();
+    }, 210);
 }
 
 // Key press listener
